@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Edit</title>
+</head>
+<body>
+<form method="POST" action="/edit/{{id}}">
+    <input type="text" name="names" value="{{message.names}}" placeholder="Название товара" />
+    <input type="text"name="description" value="{{message.description}}" placeholder="Описание товара"/>
+    <input type="text"name="material" value="{{message.material}}" placeholder="IMG"/>
+    <input type="text"name="color" value="{{message.color}}" placeholder="Цвет"/>
+    <input type="text" name="cost" value="{{message.cost}}" placeholder="Цена"/>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+    <button type="submit">Изменить</button>
+</form>
+<a href="/main">Назад</a>
+</body>
+</html>

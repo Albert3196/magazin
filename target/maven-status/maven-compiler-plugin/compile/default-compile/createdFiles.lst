@@ -1,0 +1,10 @@
+com\example\magazin\domain\Role.class
+com\example\magazin\domain\User.class
+com\example\magazin\repos\UserRepo.class
+com\example\magazin\Application.class
+com\example\magazin\controller\RegistrationController.class
+com\example\magazin\config\WebSecurityConfig.class
+com\example\magazin\controller\MainController.class
+com\example\magazin\repos\MessageRepo.class
+com\example\magazin\config\MvcConfig.class
+com\example\magazin\domain\Message.class

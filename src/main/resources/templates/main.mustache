@@ -1,0 +1,97 @@
+
+<html>
+
+<body>
+<div style="position: absolute; top: 30px; right: 5px;">
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        <input style=" background: none; border: 1px solid black; box-shadow: none;" type="submit" value="выход"/>
+    </form>
+</div>
+<button style="position: absolute; top: 5px; right: 5px; background: none; border: 1px solid black; box-shadow: none;" onclick="clearCart()">Очистить корзину</button>
+<div style="display: flex;">
+    <div>
+        <h1 style="margin: 10px 0;">Поиск товаров</h1>
+        <form method="get" action="/main">
+            <input type="text" name="filter"/>
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+    <details style="margin-left: 150px;">
+        <summary>Добавить товар </summary>
+        <form style="display: flex; flex-direction: column; width: 200px; padding: 10px;" method="POST" action="/main">
+            <input style="margin-bottom: 10px;" type="text" name="names" placeholder="Название товара" />
+            <input style="margin-bottom: 10px;" type="text"name="description" placeholder="Описание товара"/>
+            <input style="margin-bottom: 10px;" type="text"name="material" placeholder="IMG"/>
+            <input style="margin-bottom: 10px;" type="text"name="color" placeholder="Цвет"/>
+            <input style="margin-bottom: 10px;" type="text" name="cost" placeholder="Цена"/>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+            <button type="submit">Добавить</button>
+        </form>
+    </details>
+</div>
+
+<div style="display: flex">
+    {{#messages}}
+        <div style="padding: 10px; margin-right: 15px; border: 1px solid #000; border-radius: 5px;" style="display: flex; flex-direction: column; margin: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <form style="margin: 0;" method="GET" action="/remove/{{id}}" >
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+                    <button style="background: none; border: 1px solid black; box-shadow: none;" type="submit">Удалить</button>
+                </form>
+                <form style="margin: 0;" method="GET" action="/edit/{{id}}" >
+                    <button style="background: none; border: 1px solid black; box-shadow: none;" type="submit">Изменить</button>
+                </form>
+            </div>
+            <img src="{{material}}" style="width: 200px; height: 200px;" />
+            <div style="display: flex; flex-direction: column;">
+                <h3 style="margin: 5px 0 15px;">{{names}}</h3>
+                <i>{{description}}</i>
+                <span>{{color}}</span>
+                <b>{{cost}}</b>
+            </div>
+            <div style="display: flex;">
+                <button style="border-radius: 50%; border: 1px solid black; box-shadow: none; width: 30px; height: 30px;" onclick="deleteFromCart({{id}})">-</button>
+                <button style="margin-left: 5px; border-radius: 50%; border: 1px solid black; box-shadow: none; width: 30px; height: 30px;" onclick="addToCart({{id}})">+</button>
+            </div>
+            <i id="cartCountLabel{{id}}"></i><i id="cartCount{{id}}"></i>
+        </div>
+    {{/messages}}
+</div>
+</body>
+<script>
+    let cart = {};
+    function addToCart(id) {
+        const currentCount = +(document.getElementById(`cartCount${id}`).innerText) || 0;
+        document.getElementById(`cartCount${id}`).innerHTML = currentCount + 1;
+        document.getElementById(`cartCountLabel${id}`).innerHTML = 'Количество в корзине: ';
+        if (cart[id]) {
+            cart[id] = cart[id] + 1;
+        } else {
+            cart[id] = 1;
+        }
+    }
+    function deleteFromCart(id) {
+        const currentCount = +(document.getElementById(`cartCount${id}`).innerText);
+        if (currentCount && currentCount !== 0) {
+            const newCount = currentCount - 1;
+            document.getElementById(`cartCount${id}`).innerHTML = newCount === 0 ? '' : newCount;
+            if (cart[id]) {
+                cart[id] = cart[id] - 1;
+            } else {
+                cart[id] = 0;
+            }
+            if (newCount === 0) {
+                document.getElementById(`cartCountLabel${id}`).innerHTML = '';
+            }
+        }
+    }
+    function clearCart() {
+        Object.keys(cart).forEach(id => {
+            document.getElementById(`cartCount${id}`).innerHTML = '';
+            document.getElementById(`cartCountLabel${id}`).innerHTML = '';
+        })
+        cart = {};
+    }
+</script>
+</html>
